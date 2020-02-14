@@ -1,6 +1,8 @@
 node_modules
-dist/
+dist
 test
-build/
-config/
-scripts/
+build
+config
+scripts
+src/serviceWorker.js
+src/setupTests.js

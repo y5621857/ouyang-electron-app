@@ -62,7 +62,7 @@ export default class BlockLayout extends PureComponent {
             </SubMenu>
           </Menu>
         </Sider>
-        <Layout style={{marginLeft: (collapsed ? 80 : 200), transitionDuration: 0.2}}>
+        <Layout style={{marginLeft: (collapsed ? 80 : 200),transition:"all .2s"}}>
           <Header style={{background: "#fff", padding: 0}}>
             <div style={{position: "absolute", right: 10}}>
               <Avatar icon="user"
