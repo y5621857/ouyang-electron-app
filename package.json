@@ -1,4 +1,5 @@
 {
+  "main": "main.js",
   "name": "electron-react-ouyang",
   "version": "0.1.0",
   "private": true,
@@ -20,6 +21,7 @@
     "css-loader": "3.4.2",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
+    "electron": "^8.0.0",
     "eslint": "^6.6.0",
     "eslint-config-react-app": "^5.2.0",
     "eslint-loader": "3.0.3",
@@ -64,7 +66,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "ele": "electron .",
+    "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run ele\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -135,5 +139,10 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.0",
+    "electron-is-dev": "^1.1.0",
+    "wait-on": "^4.0.0"
   }
 }
