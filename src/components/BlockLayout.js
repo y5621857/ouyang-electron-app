@@ -14,39 +14,42 @@ const {SubMenu} = Menu;
 
 export default class BlockLayout extends PureComponent {
   state = {
-    collapsed: false,
+    collapsed: false
   };
-  
+
   onCollapse = collapsed => {
     console.log(collapsed);
     this.setState({collapsed});
   };
-  
+
   render() {
     const {collapsed} = this.state;
-    
+
     return (
       <Layout style={{minHeight: "100vh"}}>
         <Sider
-          style={{
-            overflow: "auto",
-            height: "100vh",
-            position: "fixed",
-            left: 0,
-          }}
-          collapsible
-          collapsed={collapsed}
-          onCollapse={this.onCollapse}
+            collapsed={collapsed}
+            collapsible
+            onCollapse={this.onCollapse}
+            style={{
+              overflow: "auto",
+              height: "100vh",
+              position: "fixed",
+              left: 0
+            }}
         >
           <div className="logo"/>
-          <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+          <Menu defaultSelectedKeys={["1"]}
+              mode="inline"
+              theme="dark"
+          >
             <Menu.Item key="1">
               <Icon type="pie-chart"/>
               <span>首页</span>
             </Menu.Item>
             <SubMenu
-              key="sub1"
-              title={
+                key="sub1"
+                title={
                 <span>
                   <Icon type="user"/>
                   <span>客户</span>
@@ -62,7 +65,9 @@ export default class BlockLayout extends PureComponent {
         <Layout style={{marginLeft: (collapsed ? 80 : 200), transitionDuration: 0.2}}>
           <Header style={{background: "#fff", padding: 0}}>
             <div style={{position: "absolute", right: 10}}>
-              <Avatar style={{backgroundColor: "#87d068"}} icon="user"/><span style={{paddingLeft: 6}}>欧阳晓君</span>
+              <Avatar icon="user"
+                  style={{backgroundColor: "#87d068"}}
+              /><span style={{paddingLeft: 6}}>欧阳晓君</span>
             </div>
           </Header>
           <Content style={{margin: "6px"}}>

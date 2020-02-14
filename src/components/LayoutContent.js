@@ -28,52 +28,55 @@ export default class LayoutContent extends PureComponent {
       {
         title: "Tab 3",
         content: "Content of Tab 3",
-        key: "3",
-      },
+        key: "3"
+      }
     ];
     this.state = {
       activeKey: panes[0].key,
-      panes,
+      panes
     };
   }
-  
+
   onChange = activeKey => {
     this.setState({activeKey});
   };
-  
+
   onEdit = (targetKey, action) => {
     this[action](targetKey);
   };
-  
+
   add = () => {
     const {panes} = this.state;
     const activeKey = `newTab${this.newTabIndex++}`;
     panes.push({title: "New Tab", content: "Content of new Tab", key: activeKey});
     this.setState({panes, activeKey});
   };
-  
+
   remove = targetKey => {
     let {activeKey} = this.state;
-    
+
     const panes = this.state.panes.filter(pane => pane.key !== targetKey);
     if (panes.length && activeKey === targetKey) {
       activeKey = panes[0].key;
     }
     this.setState({panes, activeKey});
   };
-  
+
   render() {
     const {panes} = this.state;
-    
+
     return (
       <Tabs
-        onChange={this.onChange}
-        activeKey={this.state.activeKey}
-        type="editable-card"
-        onEdit={this.onEdit}
+          activeKey={this.state.activeKey}
+          onChange={this.onChange}
+          onEdit={this.onEdit}
+          type="editable-card"
       >
         {panes.map(pane => (
-          <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+          <TabPane closable={pane.closable}
+              key={pane.key}
+              tab={pane.title}
+          >
             {pane.content}
           </TabPane>
         ))}
