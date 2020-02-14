@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.1.2",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
+    "antd": "^3.26.9",
     "babel-eslint": "10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.0.6",
@@ -141,8 +142,13 @@
     ]
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.13.0",
     "cross-env": "^7.0.0",
+    "customize-cra": "^0.9.1",
     "electron-is-dev": "^1.1.0",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
+    "react-app-rewired": "^2.1.5",
     "wait-on": "^4.0.0"
   }
 }
