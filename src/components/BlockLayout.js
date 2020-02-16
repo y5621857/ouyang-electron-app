@@ -5,25 +5,65 @@
  * Time: 11:30
  */
 import React, {PureComponent} from "react";
-
-import {Layout, Menu, Icon, Avatar} from "antd";
+import AppConfig from "../config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAirFreshener } from "@fortawesome/free-solid-svg-icons";
+import {Layout, Avatar} from "antd";
+import AppMenu from "./AppMenu";
 import LayoutContent from "./LayoutContent";
+import Home from "../pages/Home";
+import Custom from "../pages/Customer";
+import _ from "lodash";
+import Styles from "./BlockLayout.less";
 
 const {Header, Content, Sider} = Layout;
-const {SubMenu} = Menu;
+
+const ContentMap={
+  [AppConfig.menu.home.key]:<Home/>,
+  [AppConfig.menu.custom.key]:<Custom/>
+};
 
 export default class BlockLayout extends PureComponent {
   state = {
-    collapsed: false
+    collapsed: false,
+    activeKey:AppConfig.menu.home.key,
+    menuTagList:[
+      {
+        title:AppConfig.menu.home.title,
+        key:AppConfig.menu.home.key,
+        content:ContentMap.home,
+        closable: false
+      }
+    ]
   };
 
   onCollapse = collapsed => {
-    console.log(collapsed);
     this.setState({collapsed});
   };
 
+  onSelect = ({key}) => {
+    const {menuTagList}=this.state;
+    const _menuTagList = _.cloneDeep(menuTagList);
+    const hasMenu = _.findIndex(menuTagList,(o)=>{
+      return o.key===key;
+    });
+    console.log(hasMenu);
+    // eslint-disable-next-line no-prototype-builtins
+    if(hasMenu===-1&& AppConfig&& AppConfig.menu&& AppConfig.menu.hasOwnProperty(key)){
+      _menuTagList.push({
+        title:AppConfig.menu[key].title,
+        key:AppConfig.menu[key].key,
+        content:ContentMap[key]
+      });
+
+      this.setState({
+        menuTagList:_menuTagList
+      });
+    }
+  };
+
   render() {
-    const {collapsed} = this.state;
+    const {collapsed,menuTagList,activeKey} = this.state;
 
     return (
       <Layout style={{minHeight: "100vh"}}>
@@ -38,41 +78,29 @@ export default class BlockLayout extends PureComponent {
               left: 0
             }}
         >
-          <div className="logo"/>
-          <Menu defaultSelectedKeys={["1"]}
-              mode="inline"
-              theme="dark"
-          >
-            <Menu.Item key="1">
-              <Icon type="pie-chart"/>
-              <span>首页</span>
-            </Menu.Item>
-            <SubMenu
-                key="sub1"
-                title={
-                <span>
-                  <Icon type="user"/>
-                  <span>客户</span>
-                </span>
-              }
-            >
-              <Menu.Item key="3">Tom</Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
-            </SubMenu>
-          </Menu>
+          <div className={Styles.logo}>
+            <FontAwesomeIcon icon={faAirFreshener} />
+            <span className={Styles.logoTitle}>欧阳管理系统</span>
+          </div>
+          <AppMenu
+              defaultSelectedKeys={[activeKey]}
+              onSelect={this.onSelect}
+          />
         </Sider>
         <Layout style={{marginLeft: (collapsed ? 80 : 200),transition:"all .2s"}}>
           <Header style={{background: "#fff", padding: 0}}>
             <div style={{position: "absolute", right: 10}}>
               <Avatar icon="user"
                   style={{backgroundColor: "#87d068"}}
-              /><span style={{paddingLeft: 6}}>欧阳晓君</span>
+              /><span style={{paddingLeft: 6}}>{AppConfig.appName}</span>
             </div>
           </Header>
           <Content style={{margin: "6px"}}>
             <div style={{background: "#fff", minHeight: 360}}>
-              <LayoutContent/>
+              <LayoutContent
+                  activeKey={activeKey}
+                  panes={menuTagList}
+              />
             </div>
           </Content>
         </Layout>

@@ -5,39 +5,15 @@
  * Time: 11:36
  */
 import React, {PureComponent} from "react";
+import PropsType from "prop-types";
 import {Tabs} from "antd";
 
 const {TabPane} = Tabs;
 
 export default class LayoutContent extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.newTabIndex = 0;
-    const panes = [
-      {
-        title: "首页",
-        content: "Content of Tab 1",
-        key: "1",
-        closable: false
-      },
-      {
-        title: "Tab 2",
-        content: "Content of Tab 2",
-        key: "2"
-      },
-      {
-        title: "Tab 3",
-        content: "Content of Tab 3",
-        key: "3"
-      }
-    ];
-    this.state = {
-      activeKey: panes[0].key,
-      panes
-    };
-  }
 
   onChange = activeKey => {
+    console.log(activeKey);
     this.setState({activeKey});
   };
 
@@ -63,11 +39,11 @@ export default class LayoutContent extends PureComponent {
   };
 
   render() {
-    const {panes} = this.state;
+    const {panes,activeKey}=this.props;
 
     return (
       <Tabs
-          activeKey={this.state.activeKey}
+          activeKey={activeKey}
           onChange={this.onChange}
           onEdit={this.onEdit}
           type="editable-card"
@@ -84,3 +60,13 @@ export default class LayoutContent extends PureComponent {
     );
   }
 }
+
+LayoutContent.propTypes={
+  panes:PropsType.array,
+  activeKey:PropsType.string
+};
+
+LayoutContent.defaultProps={
+  panes:[],
+  activeKey:"首页"
+};

@@ -6,6 +6,7 @@
  */
 const {app, BrowserWindow} = require("electron");
 const isDev = require("electron-is-dev");
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 let mainWindow;
 
 app.on("ready", () => {
@@ -16,8 +17,8 @@ app.on("ready", () => {
       nodeIntegration: true
     }
   });
-  
+
   const urlLocation = isDev ? "http://localhost:3000/" : "";
-  
+
   mainWindow.loadURL(urlLocation);
 });

@@ -20,14 +20,15 @@ module.exports = {
         "ecmaVersion": 7
     },
     "plugins": [
-        "react"
+        "react",
+        "react-hooks"
     ],
     "rules": {
         "quotes": [2, "double"], //单引号
         "no-console": 0, //不禁用console
         "no-debugger": 2, //禁用debugger
         "no-var": 0, //对var警告
-        "semi": 0, //不强制使用分号
+        "semi": ["error", "always"], //结尾强制使用分号
         "no-irregular-whitespace": 0, //不规则的空白不允许
         "no-trailing-spaces": 1, //一行结束后面有空格就发出警告
         "eol-last": 0, //文件以单一的换行符结束
@@ -52,6 +53,7 @@ module.exports = {
         "no-use-before-define": 2, //未定义前不能使用
         "camelcase": 0, //强制驼峰法命名
         "jsx-quotes": [2, "prefer-double"], //强制在JSX属性（jsx-quotes）中一致使用双引号
+        "react-hooks/rules-of-hooks": "error", //react hooks 支持
         "react/display-name": 0, //防止在React组件定义中丢失displayName
         "react/forbid-prop-types": [2, {"forbid": ["any"]}], //禁止某些propTypes
         "react/jsx-boolean-value": 2, //在JSX中强制布尔属性符号
