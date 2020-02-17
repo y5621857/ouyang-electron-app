@@ -137,7 +137,7 @@ export default class BlockLayout extends PureComponent {
             </div>
           </Header>
           <Content style={{margin: "6px"}}>
-            <div style={{background: "#fff", minHeight: 360}}>
+            <div style={{background: "#fff", minHeight: "100%"}}>
               <LayoutContent
                   activeKey={activeKey}
                   onChange={this.panOnChange}
