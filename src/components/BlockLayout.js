@@ -41,23 +41,62 @@ export default class BlockLayout extends PureComponent {
     this.setState({collapsed});
   };
 
-  onSelect = ({key}) => {
+  menuOnSelect = ({key}) => {
+    this.panItemChangeHandle(key,"add");
+  };
+
+  panOnRemove = (key,action) => {
+    this.panItemChangeHandle(key,action);
+  };
+
+  panOnChange = (activeKey) => {
+    this.setState({
+      activeKey
+    });
+  };
+
+  panItemChangeHandle = (key, action) => {
     const {menuTagList}=this.state;
     const _menuTagList = _.cloneDeep(menuTagList);
-    const hasMenu = _.findIndex(menuTagList,(o)=>{
-      return o.key===key;
-    });
-    console.log(hasMenu);
-    // eslint-disable-next-line no-prototype-builtins
-    if(hasMenu===-1&& AppConfig&& AppConfig.menu&& AppConfig.menu.hasOwnProperty(key)){
-      _menuTagList.push({
-        title:AppConfig.menu[key].title,
-        key:AppConfig.menu[key].key,
-        content:ContentMap[key]
+
+    if(action==="add"){
+      const hasMenu = _.findIndex(menuTagList,(o)=>{
+        return o.key===key;
+      });
+
+      // eslint-disable-next-line no-prototype-builtins
+      if(hasMenu===-1&& AppConfig&& AppConfig.menu&& AppConfig.menu.hasOwnProperty(key)){
+        _menuTagList.push({
+          title:AppConfig.menu[key].title,
+          key:AppConfig.menu[key].key,
+          content:ContentMap[key]
+        });
+
+        this.setState({
+          menuTagList:_menuTagList,
+          activeKey: key
+        });
+      }else{
+        this.setState({
+          activeKey: key
+        });
+      }
+    }
+
+    if(action==="remove"){
+      const _curIndex=_.findIndex(menuTagList,(o)=>{
+        return o.key===key;
+      });
+
+      const _activeKey=menuTagList[_curIndex-1].key;
+
+      _.remove(_menuTagList, (o) => {
+        return o.key === key;
       });
 
       this.setState({
-        menuTagList:_menuTagList
+        menuTagList:_menuTagList,
+        activeKey:_activeKey
       });
     }
   };
@@ -80,11 +119,13 @@ export default class BlockLayout extends PureComponent {
         >
           <div className={Styles.logo}>
             <FontAwesomeIcon icon={faAirFreshener} />
-            <span className={Styles.logoTitle}>欧阳管理系统</span>
+            <span className={Styles.logoTitle}
+                style={{paddingLeft:collapsed?0:12}}
+            >{!collapsed&&"欧阳管理系统"}</span>
           </div>
           <AppMenu
               defaultSelectedKeys={[activeKey]}
-              onSelect={this.onSelect}
+              onSelect={this.menuOnSelect}
           />
         </Sider>
         <Layout style={{marginLeft: (collapsed ? 80 : 200),transition:"all .2s"}}>
@@ -99,6 +140,8 @@ export default class BlockLayout extends PureComponent {
             <div style={{background: "#fff", minHeight: 360}}>
               <LayoutContent
                   activeKey={activeKey}
+                  onChange={this.panOnChange}
+                  onEdit={this.panOnRemove}
                   panes={menuTagList}
               />
             </div>

@@ -13,15 +13,16 @@ export default class AppMenu extends PureComponent {
   render() {
     const {
       data,
-      onSelect
+      onSelect,
+      defaultSelectedKeys
     }=this.props;
 
     return (
       <Fragment>
         <Menu
-            defaultSelectedKeys={["home"]}
             mode="inline"
             onSelect={onSelect}
+            selectedKeys={defaultSelectedKeys}
             theme="dark"
         >
           {
@@ -44,7 +45,8 @@ export default class AppMenu extends PureComponent {
 
 AppMenu.propTypes={
   data:PropTypes.array,
-  onSelect:PropTypes.func
+  onSelect:PropTypes.func,
+  defaultSelectedKeys:PropTypes.array
 };
 
 AppMenu.defaultProps={
@@ -61,5 +63,6 @@ AppMenu.defaultProps={
       url:"客户",
       icon:"user"
     }
-  ]
+  ],
+  defaultSelectedKeys:["home"]
 };

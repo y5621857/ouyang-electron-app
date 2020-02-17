@@ -12,16 +12,7 @@ const {TabPane} = Tabs;
 
 export default class LayoutContent extends PureComponent {
 
-  onChange = activeKey => {
-    console.log(activeKey);
-    this.setState({activeKey});
-  };
-
-  onEdit = (targetKey, action) => {
-    this[action](targetKey);
-  };
-
-  add = () => {
+  /*add = () => {
     const {panes} = this.state;
     const activeKey = `newTab${this.newTabIndex++}`;
     panes.push({title: "New Tab", content: "Content of new Tab", key: activeKey});
@@ -36,16 +27,17 @@ export default class LayoutContent extends PureComponent {
       activeKey = panes[0].key;
     }
     this.setState({panes, activeKey});
-  };
+  };*/
 
   render() {
-    const {panes,activeKey}=this.props;
+    const {panes,activeKey,onChange,onEdit}=this.props;
 
     return (
       <Tabs
           activeKey={activeKey}
-          onChange={this.onChange}
-          onEdit={this.onEdit}
+          hideAdd
+          onChange={onChange}
+          onEdit={onEdit}
           type="editable-card"
       >
         {panes.map(pane => (
@@ -63,7 +55,9 @@ export default class LayoutContent extends PureComponent {
 
 LayoutContent.propTypes={
   panes:PropsType.array,
-  activeKey:PropsType.string
+  activeKey:PropsType.string,
+  onChange:PropsType.func,
+  onEdit:PropsType.func
 };
 
 LayoutContent.defaultProps={
