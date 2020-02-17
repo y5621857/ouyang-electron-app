@@ -15,7 +15,25 @@ const AppConfig={
       title:"客户",
       key:"custom"
     }
-  }
+  },
+  userTags:[
+    {
+      title:"督导",
+      key:"督导"
+    },
+    {
+      title:"客户",
+      key:"客户"
+    },
+    {
+      title:"经理",
+      key:"经理"
+    },
+    {
+      title:"销售",
+      key:"销售"
+    },
+  ]
 };
 
 export default AppConfig;
