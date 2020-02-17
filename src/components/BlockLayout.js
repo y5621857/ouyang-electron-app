@@ -5,10 +5,11 @@
  * Time: 11:30
  */
 import React, {PureComponent} from "react";
+// import {Redirect} from "react-router-dom";
 import AppConfig from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAirFreshener } from "@fortawesome/free-solid-svg-icons";
-import {Layout, Avatar} from "antd";
+import {Layout, Avatar, Icon} from "antd";
 import AppMenu from "./AppMenu";
 import LayoutContent from "./LayoutContent";
 import Home from "../pages/Home";
@@ -36,6 +37,13 @@ export default class BlockLayout extends PureComponent {
       }
     ]
   };
+
+  logout = (e) => {
+    e.preventDefault();
+    this.props.history.push({
+      pathname: "/"
+    });
+  }
 
   onCollapse = collapsed => {
     this.setState({collapsed});
@@ -133,7 +141,15 @@ export default class BlockLayout extends PureComponent {
             <div style={{position: "absolute", right: 10}}>
               <Avatar icon="user"
                   style={{backgroundColor: "#87d068"}}
-              /><span style={{paddingLeft: 6}}>{AppConfig.appName}</span>
+              />
+              <span style={{paddingLeft: 6}}>{AppConfig.appName}</span>
+              <span style={{paddingLeft: 12}}>
+                <a onClick={this.logout}>
+                  <Icon style={{fontSize:20}}
+                      type="logout"
+                  />
+                </a>
+              </span>
             </div>
           </Header>
           <Content style={{margin: "6px"}}>

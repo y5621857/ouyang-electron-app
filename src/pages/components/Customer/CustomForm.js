@@ -70,7 +70,7 @@ class CustomForm extends PureComponent {
         </Form.Item>
         <Form.Item label="生日">
           {getFieldDecorator("birthday", {
-            initialValue:isUpdate?(moment(curCustom.birthday).isValid()?moment(curCustom.birthday):moment()):1
+            initialValue:isUpdate?(moment(curCustom.birthday).isValid()?moment(curCustom.birthday):moment()):null
           })(<DatePicker format="YYYY-MM-DD"/>)}
         </Form.Item>
         <Form.Item label="备注">
