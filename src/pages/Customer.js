@@ -5,12 +5,66 @@
  * Time: 20:09
  */
 import React, {PureComponent} from "react";
-import { Table, Divider, Tag } from "antd";
+import { Divider, Tag ,Popconfirm ,Button} from "antd";
+import _ from "lodash";
+import TableWrap from "../components/TableWrap";
+import PageSearch from "../components/PageSearch";
 import Styles from "./Customer.less";
 
 export default class Customer extends PureComponent {
+  state = {
+    data: [
+      {
+        id: "1",
+        key: "1",
+        name: "红",
+        age: 32,
+        address: "New York No. 1 Lake Park",
+        tags: ["销售", "财务"]
+      },
+      {
+        id: "2",
+        key: "2",
+        name: "黄",
+        age: 42,
+        address: "London No. 1 Lake Park",
+        tags: ["经理"]
+      },
+      {
+        id: "3",
+        key: "3",
+        name: "蓝",
+        age: 32,
+        address: "Sidney No. 1 Lake Park",
+        tags: ["客户", "经销商"]
+      }
+    ]
+  };
+
+  deleteCustomHandle = ({id}) => {
+    const {data}=this.state;
+    const _data = _.cloneDeep(data);
+
+    _.remove(_data,(o)=>{
+      return o.id === id;
+    });
+
+    this.setState({
+      data:_data
+    });
+  };
+
+  searchSubmitHandle = (searchParams) => {
+    console.log(searchParams);
+  };
+
+  searchResetHandle = (e) => {
+    console.log(e);
+  };
 
   render() {
+    const {data}=this.state;
+
     const columns = [
       {
         title: "姓名",
@@ -61,44 +115,43 @@ export default class Customer extends PureComponent {
           <span>
             <a>编辑</a>
             <Divider type="vertical" />
-            <a>删除</a>
+            <Popconfirm cancelText="取消"
+                okText="确定"
+                onConfirm={()=>this.deleteCustomHandle(record)}
+                placement="topLeft"
+                title="确定删除这个客户吗?"
+            >
+              <a style={{color:"red"}}>删除</a>
+            </Popconfirm>
           </span>
         )
       }
     ];
 
-    const data = [
+    const searchData=[
       {
-        key: "1",
-        name: "红",
-        age: 32,
-        address: "New York No. 1 Lake Park",
-        tags: ["销售", "财务"]
-      },
-      {
-        key: "2",
-        name: "黄",
-        age: 42,
-        address: "London No. 1 Lake Park",
-        tags: ["经理"]
-      },
-      {
-        key: "3",
-        name: "蓝",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["客户", "经销商"]
+        label:"姓名",
+        key:"name",
+        type:"input"
       }
     ];
 
     return (
       <div className={Styles.ContentWrap}>
         <div>
-          <Table bordered
-              columns={columns}
-              dataSource={data}
-              size="small"
-          />
+          <TableWrap columns={columns}
+              data={data}
+          >
+            <div className={Styles.SearchWrap}>
+              <PageSearch onReset={this.searchResetHandle}
+                  onSubmit={this.searchSubmitHandle}
+                  searchData={searchData}
+              />
+            </div>
+            <div className={Styles.OperationWrap}>
+              <Button icon="user-add">添加用户</Button>
+            </div>
+          </TableWrap>
         </div>
       </div>
     );

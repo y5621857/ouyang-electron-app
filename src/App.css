@@ -38,3 +38,8 @@
     transform: rotate(360deg);
   }
 }
+
+/*override-ant-css*/
+.ant-tabs-bar {
+  margin: 0 0 8px 0;
+}
