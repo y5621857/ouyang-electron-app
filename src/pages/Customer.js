@@ -44,11 +44,25 @@ export default class Customer extends PureComponent {
   }
 
   searchSubmitHandle = (searchParams) => {
-    console.log(searchParams);
+    const data= storeHelper.getItem("custom");
+    const reg = new RegExp(searchParams.name,"g");
+
+    const result = data.filter((item)=>{
+      return reg.test(item.name);
+    });
+
+    this.setState({
+      data:result
+    });
   };
 
   searchResetHandle = (e) => {
-    console.log(e);
+    if(e==="reset"){
+      const _data = storeHelper.getItem("custom");
+      this.setState({
+        data:_data
+      });
+    }
   };
 
   customModelHandle = (type="insert",show=false,data={}) => {
@@ -144,7 +158,7 @@ export default class Customer extends PureComponent {
 
     // console.log(filepaths);
     if(filepaths&&filepaths[0]){
-      const {data}=this.state;
+      const data = storeHelper.getItem("custom");
       // 读取文件
       const workbook = XLSX.readFile(filepaths[0]);
       let xlsxData=[];
