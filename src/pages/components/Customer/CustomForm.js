@@ -6,7 +6,7 @@
  */
 import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
-import {Form, Input, InputNumber, Select, DatePicker, Button} from "antd";
+import {Form, Input, Select, DatePicker, Button} from "antd";
 import moment from "moment";
 import AppConifg from "../../../config";
 
@@ -33,8 +33,7 @@ class CustomForm extends PureComponent {
         let params = {
           ...curCustom,
           ...values,
-          birthday:values.birthday?moment(values.birthday).format("YYYY-MM-DD"):"",
-          mounthDay:values.birthday?moment(values.birthday).format("MM-DD"):"",
+          birthday:values.birthday?moment(values.birthday).format("MM-DD"):"",
           tags:values.tags?values.tags:[]
         };
 
@@ -61,17 +60,10 @@ class CustomForm extends PureComponent {
             ]
           })(<Input placeholder="请输入"/>)}
         </Form.Item>
-        <Form.Item label="年龄">
-          {getFieldDecorator("age", {
-            initialValue:isUpdate?curCustom.age:1
-          })(<InputNumber max={99}
-              min={1}
-             />)}
-        </Form.Item>
         <Form.Item label="生日">
           {getFieldDecorator("birthday", {
-            initialValue:isUpdate?(moment(curCustom.birthday).isValid()?moment(curCustom.birthday):moment()):null
-          })(<DatePicker format="YYYY-MM-DD"/>)}
+            initialValue:isUpdate?(curCustom.birthday?moment(curCustom.birthday,"MM-DD"):moment()):null
+          })(<DatePicker format="MM-DD"/>)}
         </Form.Item>
         <Form.Item label="备注">
           {getFieldDecorator("tags", {

@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 
 export default class TableWrap extends PureComponent {
   render() {
-    const {data,columns,children}=this.props;
+    const {data,columns,children,selectedRowKeys,onSelectChange}=this.props;
 
     return (
       <div>
@@ -18,6 +18,16 @@ export default class TableWrap extends PureComponent {
         <Table bordered
             columns={columns}
             dataSource={data}
+            pagination={{
+              showTotal:()=>`共计 ${data.length} 条`,
+              pageSizeOptions:["5","8","10","15","20"],
+              showSizeChanger:true,
+              showQuickJumper:true
+            }}
+            rowSelection={{
+              selectedRowKeys:selectedRowKeys,
+              onChange: onSelectChange
+            }}
             size="small"
         />
       </div>
@@ -27,10 +37,13 @@ export default class TableWrap extends PureComponent {
 
 TableWrap.propTypes={
   data:PropTypes.array,
-  columns:PropTypes.array
+  columns:PropTypes.array,
+  selectedRowKeys:PropTypes.array,
+  onSelectChange:PropTypes.func
 };
 
 TableWrap.defaultProps={
   data:[],
-  columns:[]
+  columns:[],
+  selectedRowKeys:[]
 };
