@@ -10,14 +10,6 @@ import { Form, Input, Button } from "antd";
 import Styles from "./PageSearch.less";
 
 class PageSearch extends PureComponent {
-  // onKeyup = (e) => {
-  //   console.log(e);
-  //   e.preventDefault();
-  //   if(e.keyCode === 13) {
-  //     this.onSubmit();
-  //   }
-  // };
-
   searchItemRender = () => {
     const {searchData}=this.props;
     const { getFieldDecorator } = this.props.form;

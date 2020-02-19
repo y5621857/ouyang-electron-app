@@ -104,21 +104,29 @@ export default class Customer extends PureComponent {
       }
 
       if(show===false&& data && data.id){
+        const storeData = storeHelper.getItem("custom");
+        const _storeData = _.cloneDeep(storeData);
         console.log("update commit",data);
 
         const _curIndex=_.findIndex(_data,(o)=>{
           return o.id===data.id;
         });
 
+        let updateStoreData = _storeData.map((o)=>{
+          let _data = o;
+          if(o.id===data.id){
+            _data = data;
+          }
+          return _data;
+        });
+
         if(_curIndex!==-1){
-          console.log(data);
           _data[_curIndex]=data;
-          console.log(_data);
 
           this.setState({
             data:_data
           },()=>{
-            storeHelper.setItem("custom",_data);
+            storeHelper.setItem("custom",updateStoreData);
           });
         }
       }
@@ -209,21 +217,29 @@ export default class Customer extends PureComponent {
   deleteCustomHandle = ({id}) => {
     const {data}=this.state;
     const _data = _.cloneDeep(data);
+    const storeData = storeHelper.getItem("custom");
+    const _storeData = _.cloneDeep(storeData);
 
     _.remove(_data,(o)=>{
+      return o.id === id;
+    });
+
+    _.remove(_storeData,(o)=>{
       return o.id === id;
     });
 
     this.setState({
       data:_data
     },()=>{
-      storeHelper.setItem("custom",_data);
+      storeHelper.setItem("custom",_storeData);
     });
   };
 
   tableBatchDelete = () => {
     const {data,tableSelectRowKeys}=this.state;
     const _data = _.cloneDeep(data);
+    const storeData = storeHelper.getItem("custom");
+    const _storeData = _.cloneDeep(storeData);
 
     Modal.confirm({
       title: "提示",
@@ -235,11 +251,15 @@ export default class Customer extends PureComponent {
           return tableSelectRowKeys.includes(o.key);
         });
 
+        _.remove(_storeData,(o)=>{
+          return tableSelectRowKeys.includes(o.key);
+        });
+
         this.setState({
           data:_data,
           tableSelectRowKeys:[]
         },()=>{
-          storeHelper.setItem("custom",_data);
+          storeHelper.setItem("custom",_storeData);
         });
       }
     });
