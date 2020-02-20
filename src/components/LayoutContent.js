@@ -12,23 +12,6 @@ const {TabPane} = Tabs;
 
 export default class LayoutContent extends PureComponent {
 
-  /*add = () => {
-    const {panes} = this.state;
-    const activeKey = `newTab${this.newTabIndex++}`;
-    panes.push({title: "New Tab", content: "Content of new Tab", key: activeKey});
-    this.setState({panes, activeKey});
-  };
-
-  remove = targetKey => {
-    let {activeKey} = this.state;
-
-    const panes = this.state.panes.filter(pane => pane.key !== targetKey);
-    if (panes.length && activeKey === targetKey) {
-      activeKey = panes[0].key;
-    }
-    this.setState({panes, activeKey});
-  };*/
-
   render() {
     const {panes,activeKey,onChange,onEdit}=this.props;
 

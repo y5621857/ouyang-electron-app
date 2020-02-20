@@ -95,7 +95,9 @@ PageSearch.defaultProps={
       type:"input",
       default:""
     }
-  ]
+  ],
+  onSubmit:()=>{},
+  onReset:()=>{}
 };
 
 export default Form.create()(PageSearch);

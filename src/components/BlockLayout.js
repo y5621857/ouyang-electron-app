@@ -10,18 +10,21 @@ import AppConfig from "../config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAirFreshener } from "@fortawesome/free-solid-svg-icons";
 import {Layout, Avatar, Icon} from "antd";
+import _ from "lodash";
 import AppMenu from "./AppMenu";
 import LayoutContent from "./LayoutContent";
 import Home from "../pages/Home";
 import Custom from "../pages/Customer";
-import _ from "lodash";
+import BrithdayUser from "../pages/BrithdayUser";
+import {objToArr} from "../utils/helper";
 import Styles from "./BlockLayout.less";
 
 const {Header, Content, Sider} = Layout;
 
 const ContentMap={
   [AppConfig.menu.home.key]:<Home/>,
-  [AppConfig.menu.custom.key]:<Custom/>
+  [AppConfig.menu.custom.key]:<Custom/>,
+  [AppConfig.menu.brithdayUser.key]:<BrithdayUser/>
 };
 
 export default class BlockLayout extends PureComponent {
@@ -43,7 +46,7 @@ export default class BlockLayout extends PureComponent {
     this.props.history.push({
       pathname: "/"
     });
-  }
+  };
 
   onCollapse = collapsed => {
     this.setState({collapsed});
@@ -111,6 +114,12 @@ export default class BlockLayout extends PureComponent {
 
   render() {
     const {collapsed,menuTagList,activeKey} = this.state;
+    const AppMenuData = objToArr(AppConfig.menu).map((o)=>({
+      title:o.title || "",
+      key:o.key || "",
+      url:o.title || "",
+      icon:o.icon || ""
+    }));
 
     return (
       <Layout style={{minHeight: "100vh"}}>
@@ -132,6 +141,7 @@ export default class BlockLayout extends PureComponent {
             >{!collapsed&&"欧阳管理系统"}</span>
           </div>
           <AppMenu
+              data={AppMenuData}
               defaultSelectedKeys={[activeKey]}
               onSelect={this.menuOnSelect}
           />

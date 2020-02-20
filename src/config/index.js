@@ -9,11 +9,18 @@ const AppConfig={
   menu:{
     home:{
       title:"首页",
-      key:"home"
+      key:"home",
+      icon:"home"
     },
     custom:{
       title:"客户",
-      key:"custom"
+      key:"custom",
+      icon:"user"
+    },
+    brithdayUser:{
+      title:"送祝福客户",
+      key:"brithdayUser",
+      icon:"aliwangwang"
     }
   },
   userTags:[
