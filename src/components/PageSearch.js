@@ -62,12 +62,13 @@ class PageSearch extends PureComponent {
           {ItemNode}
           <Form.Item>
             <Button htmlType="submit"
-                onClick={this.onSubmit}
                 type="primary"
             >
               {okText}
             </Button>
-            <Button onClick={this.onReset}>
+            <Button onClick={this.onReset}
+                style={{marginLeft:8}}
+            >
               {cancleText}
             </Button>
           </Form.Item>

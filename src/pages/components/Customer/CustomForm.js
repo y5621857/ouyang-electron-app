@@ -48,7 +48,9 @@ class CustomForm extends PureComponent {
     const isUpdate = type==="update";
 
     return (
-      <Form {...formItemLayout}>
+      <Form onSubmit={this.onSubmit}
+          {...formItemLayout}
+      >
         <Form.Item label="姓名">
           {getFieldDecorator("name", {
             initialValue:isUpdate?curCustom.name:"",
@@ -86,7 +88,7 @@ class CustomForm extends PureComponent {
             style={{textAlign:"right"}}
             wrapperCol={{span:24}}
         >
-          <Button onClick={this.onSubmit}
+          <Button htmlType="submit"
               type="primary"
           >
             保存

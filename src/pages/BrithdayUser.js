@@ -4,7 +4,7 @@
  * Date: 2020-02-19
  * Time: 20:14
  */
-import React, {PureComponent} from "react";
+import React, {Component} from "react";
 import { Tag, Modal, Alert, Button } from "antd";
 import storeHelper from "../utils/storeHelper";
 import moment from "moment";
@@ -15,7 +15,7 @@ import PageSearch from "../components/PageSearch";
 import Styles from "./BrithdayUser.less";
 import CustomForm from "./components/Customer/CustomForm";
 
-export default class BrithdayUser extends PureComponent {
+export default class BrithdayUser extends Component {
   state={
     data: [],
     customModelShow:false,
@@ -26,6 +26,14 @@ export default class BrithdayUser extends PureComponent {
 
   componentDidMount() {
     this.fetchData();
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  UNSAFE_componentWillReceiveProps(nextProps, nextContent) {
+    const {show}=nextProps;
+    if(show){
+      this.fetchData();
+    }
   }
 
   fetchData = () => {

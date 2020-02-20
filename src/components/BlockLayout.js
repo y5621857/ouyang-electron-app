@@ -13,19 +13,10 @@ import {Layout, Avatar, Icon} from "antd";
 import _ from "lodash";
 import AppMenu from "./AppMenu";
 import LayoutContent from "./LayoutContent";
-import Home from "../pages/Home";
-import Custom from "../pages/Customer";
-import BrithdayUser from "../pages/BrithdayUser";
 import {objToArr} from "../utils/helper";
 import Styles from "./BlockLayout.less";
 
 const {Header, Content, Sider} = Layout;
-
-const ContentMap={
-  [AppConfig.menu.home.key]:<Home/>,
-  [AppConfig.menu.custom.key]:<Custom/>,
-  [AppConfig.menu.brithdayUser.key]:<BrithdayUser/>
-};
 
 export default class BlockLayout extends PureComponent {
   state = {
@@ -35,7 +26,6 @@ export default class BlockLayout extends PureComponent {
       {
         title:AppConfig.menu.home.title,
         key:AppConfig.menu.home.key,
-        content:ContentMap.home,
         closable: false
       }
     ]
@@ -79,8 +69,7 @@ export default class BlockLayout extends PureComponent {
       if(hasMenu===-1&& AppConfig&& AppConfig.menu&& AppConfig.menu.hasOwnProperty(key)){
         _menuTagList.push({
           title:AppConfig.menu[key].title,
-          key:AppConfig.menu[key].key,
-          content:ContentMap[key]
+          key:AppConfig.menu[key].key
         });
 
         this.setState({

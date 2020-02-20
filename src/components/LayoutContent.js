@@ -7,10 +7,33 @@
 import React, {PureComponent} from "react";
 import PropsType from "prop-types";
 import {Tabs} from "antd";
+import Home from "../pages/Home";
+import Custom from "../pages/Customer";
+import BrithdayUser from "../pages/BrithdayUser";
+import AppConig from "../config";
 
 const {TabPane} = Tabs;
 
 export default class LayoutContent extends PureComponent {
+
+  curContent = (key, activeKey) => {
+    let curComponent = null;
+
+    switch ( key ) {
+      case AppConig.menu.home.key:
+        curComponent = <Home show={activeKey===AppConig.menu.home.key}/>;
+        break;
+      case AppConig.menu.custom.key:
+        curComponent = <Custom show={activeKey===AppConig.menu.custom.key}/>;
+        break;
+      case AppConig.menu.brithdayUser.key:
+        curComponent = <BrithdayUser show={activeKey===AppConig.menu.brithdayUser.key}/>;
+        break;
+      default:
+    }
+
+    return curComponent;
+  };
 
   render() {
     const {panes,activeKey,onChange,onEdit}=this.props;
@@ -28,7 +51,9 @@ export default class LayoutContent extends PureComponent {
               key={pane.key}
               tab={pane.title}
           >
-            {pane.content}
+            {
+              this.curContent(pane.key, activeKey)
+            }
           </TabPane>
         ))}
       </Tabs>
@@ -44,6 +69,7 @@ LayoutContent.propTypes={
 };
 
 LayoutContent.defaultProps={
+  contentMap:[],
   panes:[],
   activeKey:"首页"
 };
