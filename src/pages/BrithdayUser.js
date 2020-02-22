@@ -5,7 +5,7 @@
  * Time: 20:14
  */
 import React, {Component, Fragment} from "react";
-import { Tag, Modal, Alert, Button, Divider } from "antd";
+import { Tag, Modal, Alert, Button, Divider, Icon } from "antd";
 import storeHelper from "../utils/storeHelper";
 import {flattenArr, objToArr} from "../utils/helper";
 import moment from "moment";
@@ -15,6 +15,7 @@ import PageSearch from "../components/PageSearch";
 import Styles from "./BrithdayUser.less";
 import Message from "./components/Common/Message";
 import MsgTeplate from "./components/Common/MsgTeplate";
+import MsgComplete from "./components/Common/MsgComplete";
 import MsgTemplateForm from "./components/BrithdayUser/MsgTemplateForm";
 import uuidv4 from "uuid/v4";
 
@@ -24,9 +25,12 @@ export default class BrithdayUser extends Component {
     messageModelShow:false,
     msgTemplateModelShow:false,
     templateModelOperationShow:false,
+    msgCompleteModelShow:false,
     msgTemplateTpye:"insert",
     curMsgTemplate:{},
     curCustom:{},
+    curMsg:{},
+    curCompleteMsg:"",
     tableSelectRowKeys:[]
   };
 
@@ -84,7 +88,19 @@ export default class BrithdayUser extends Component {
   };
 
   onSelectedMessage = (msg) => {
-    console.log(msg);
+    Modal.confirm({
+      content:"确定使用这条祝福语吗？",
+      icon:<Icon type="question-circle" />,
+      centered:true,
+      onOk:()=>{
+        this.setState({
+          curMsg:msg
+        },()=>{
+          this.messageModelHandle(false);
+          this.msgTemplateModelHandle(true);
+        });
+      }
+    });
   };
 
   msgTemplateModelHandle = (show=false) => {
@@ -97,7 +113,8 @@ export default class BrithdayUser extends Component {
     this.setState({
       templateModelOperationShow: show,
       msgTemplateTpye:type,
-      curMsgTemplate:data
+      curMsgTemplate:data,
+      curCompleteMsg:""
     });
   };
 
@@ -132,14 +149,46 @@ export default class BrithdayUser extends Component {
     }
   };
 
+  msgCompleteModelShowHandle = (show=false) => {
+    this.setState({
+      msgCompleteModelShow:show
+    },()=>{
+      if(!show){
+        this.setState({
+          curCompleteMsg:""
+        });
+      }
+    });
+  };
+
+  renderSentiment = (template = {}) => {
+    const {html} = template;
+
+    if (html) {
+      const {curCustom, curMsg} = this.state;
+      let curCompleteMsg = html.replace(/\$NAME\$/g, curCustom.name).replace(/\$CONTENT\$/g, curMsg.body);
+
+      this.setState({
+        curCompleteMsg
+      }, () => {
+        this.setState({
+          msgCompleteModelShow:true
+        });
+      });
+    }
+  };
+
   render() {
     const {
       data,
       messageModelShow,
       msgTemplateModelShow,
       templateModelOperationShow,
+      msgCompleteModelShow,
       msgTemplateTpye,
       curMsgTemplate,
+      curMsg,
+      curCompleteMsg,
       tableSelectRowKeys
     }=this.state;
 
@@ -181,11 +230,11 @@ export default class BrithdayUser extends Component {
       {
         title: "操作",
         key: "action",
-        width:150,
+        width:160,
         render: (text, record) => (
           <Fragment>
             <span onClick={()=>this.sendMessage(record)}>
-              <a>短信模板</a>
+              <a>祝福语模板</a>
             </span>
             <Divider type="vertical"/>
             <span onClick={()=>this.sendMessage(record)}>
@@ -260,7 +309,9 @@ export default class BrithdayUser extends Component {
             visible={msgTemplateModelShow}
             width="80%"
         >
-          <MsgTeplate onEditer={this.templateModelOperationShow}
+          <MsgTeplate hasSentiment={Object.keys(curMsg).length!==0}
+              onEditer={this.templateModelOperationShow}
+              onSubmit={this.renderSentiment}
               ref={(child) => { this.MsgTeplate = child; }}
           >
             <div style={{marginBottom:8}}>
@@ -278,13 +329,25 @@ export default class BrithdayUser extends Component {
             footer={null}
             mask={false}
             onCancel={()=>this.templateModelOperationShow(false)}
-            title="短信模板"
+            title="编辑短信模板"
             visible={templateModelOperationShow}
             width="50%"
         >
           <MsgTemplateForm curMsg={curMsgTemplate}
               onSubmit={this.templateModelOperationSubmit}
               type={msgTemplateTpye}
+          />
+        </Modal>
+        <Modal destroyOnClose
+            footer={null}
+            mask={false}
+            onCancel={()=>this.msgCompleteModelShowHandle(false)}
+            title="祝福短信"
+            visible={msgCompleteModelShow}
+            width="50%"
+        >
+          <MsgComplete
+              msg={curCompleteMsg}
           />
         </Modal>
       </div>

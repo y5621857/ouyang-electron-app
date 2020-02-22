@@ -6,7 +6,7 @@
  */
 import React, {Fragment, PureComponent} from "react";
 import PropTypes from "prop-types";
-import { Divider, Popconfirm } from "antd";
+import { Divider, Popconfirm, Modal, Icon } from "antd";
 import storeHelper from "../../../utils/storeHelper";
 import {flattenArr, objToArr} from "../../../utils/helper";
 import TableWrap from "../../../components/TableWrap";
@@ -29,7 +29,17 @@ export default class MsgTeplate extends PureComponent {
   };
 
   checkRow = (record) => {
-    console.log(record);
+    const {hasSentiment, onSubmit}=this.props;
+    if(hasSentiment){
+      Modal.confirm({
+        content:"确定使用这条短信模板吗？",
+        icon:<Icon type="question-circle" />,
+        centered:true,
+        onOk:()=>{
+          onSubmit(record);
+        }
+      });
+    }
   };
 
   editorMsg = (e,record) => {
@@ -117,9 +127,13 @@ export default class MsgTeplate extends PureComponent {
 }
 
 MsgTeplate.defaultProps={
+  hasSentiment:false,
+  onSubmit:()=>{},
   onEditer:()=>{}
 };
 
 MsgTeplate.propTypes={
+  hasSentiment:PropTypes.bool,
+  onSubmit:PropTypes.func,
   onEditer:PropTypes.func
 };
