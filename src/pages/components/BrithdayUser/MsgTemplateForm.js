@@ -85,7 +85,9 @@ class MsgTemplateForm extends PureComponent {
           <Alert message={
             <div>
               <div>1、用户名请用 <span style={{color:"red"}}>$NAME$</span> 代替，生成短信时将会是对应的用户姓名</div>
-                <div>2、祝福语请用 <span style={{color:"red"}}>$CONTENT$</span> 代替，生成短信时将会是对应的祝福语内容</div>
+              <div>2、祝福语请用 <span style={{color:"red"}}>$SEX$</span> 代替，生成短信时将会是对应的用户性别</div>
+              <div>3、祝福语请用 <span style={{color:"red"}}>$REMARK$</span> 代替，生成短信时将会是对应的用户备注</div>
+              <div>4、祝福语请用 <span style={{color:"red"}}>$CONTENT$</span> 代替，生成短信时将会是对应的祝福语内容</div>
             </div>
           }
           />

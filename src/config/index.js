@@ -6,6 +6,9 @@
  */
 const AppConfig={
   appName:"欧阳管理系统",
+  applicationVersion:"1.0.0",
+  version:"1.0.0",
+  copyright:"杨祎",
   menu:{
     home:{
       title:"首页",

@@ -41,6 +41,10 @@ export default class Customer extends PureComponent {
     this.setState({
       data:_data
     });
+
+    ipcRenderer.on("creat-new-file",()=>{
+      console.log("da");
+    });
   }
 
   searchSubmitHandle = (searchParams) => {
@@ -183,14 +187,16 @@ export default class Customer extends PureComponent {
 
       const _xlsxData = xlsxData.map((item)=>{
         const id = uuidv4();
-        let _tags = item["备注"];
+        let _tags = item["标签"];
 
         return {
           id:id,
           key:id,
           name:item["姓名"]||"",
+          sex:item["性别"]||"",
           birthday:item["生日"]||"",
-          tags:_tags?_tags.split(","):[]
+          tags:_tags?_tags.split(","):[],
+          remark:item["备注"]||""
         };
       });
 
@@ -277,31 +283,44 @@ export default class Customer extends PureComponent {
         render: text => <a>{text}</a>
       },
       {
+        title: "性别",
+        dataIndex: "sex",
+        key: "sex",
+        width:90
+      },
+      {
         title: "生日",
         dataIndex: "birthday",
-        key: "birthday"
+        key: "birthday",
+        width:90
+      },
+      {
+        title: "标签",
+        key: "tags",
+        dataIndex: "tags",
+        width:200,
+        render: tags => (
+          <span>
+            {tags.map(tag => {
+              let color = tag.length > 5 ? "geekblue" : "green";
+              if (tag === "loser") {
+                color = "volcano";
+              }
+              return (
+                <Tag color={color}
+                    key={tag}
+                >
+                  {tag.toUpperCase()}
+                </Tag>
+              );
+            })}
+          </span>
+        )
       },
       {
         title: "备注",
-        key: "tags",
-        dataIndex: "tags",
-        render: tags => (
-          <span>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color}
-                key={tag}
-            >
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </span>
-        )
+        dataIndex: "remark",
+        key: "remark"
       },
       {
         title: "操作",
