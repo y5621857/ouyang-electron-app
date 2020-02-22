@@ -11,11 +11,16 @@ export const getItem=(name)=>{
   return appStore.get(name);
 };
 
+export const deleteItem=(name)=>{
+  return appStore.delete(name);
+};
+
 export const setItem=(name, value)=>{
   return appStore.set(name,value);
 };
 
 export default {
   getItem,
-  setItem
+  setItem,
+  deleteItem
 };

@@ -9,7 +9,6 @@ import AppConfig from "../config";
 import Styles from "./Home.less";
 
 export default class Home extends PureComponent {
-
   render() {
     return (
       <div className={Styles.ContentWrap}>

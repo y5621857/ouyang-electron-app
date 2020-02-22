@@ -4,22 +4,28 @@
  * Date: 2020-02-19
  * Time: 20:14
  */
-import React, {Component} from "react";
-import { Tag, Modal, Alert, Button } from "antd";
+import React, {Component, Fragment} from "react";
+import { Tag, Modal, Alert, Button, Divider } from "antd";
 import storeHelper from "../utils/storeHelper";
+import {flattenArr, objToArr} from "../utils/helper";
 import moment from "moment";
 // import _ from "lodash";
-// import uuidv4 from "uuid/v4";
 import TableWrap from "../components/TableWrap";
 import PageSearch from "../components/PageSearch";
 import Styles from "./BrithdayUser.less";
-import CustomForm from "./components/Customer/CustomForm";
+import Message from "./components/Common/Message";
+import MsgTeplate from "./components/Common/MsgTeplate";
+import MsgTemplateForm from "./components/BrithdayUser/MsgTemplateForm";
+import uuidv4 from "uuid/v4";
 
 export default class BrithdayUser extends Component {
   state={
     data: [],
-    customModelShow:false,
-    customModelType:"insert",
+    messageModelShow:false,
+    msgTemplateModelShow:false,
+    templateModelOperationShow:false,
+    msgTemplateTpye:"insert",
+    curMsgTemplate:{},
     curCustom:{},
     tableSelectRowKeys:[]
   };
@@ -63,8 +69,79 @@ export default class BrithdayUser extends Component {
     this.fetchData();
   };
 
+  sendMessage = (record) => {
+    this.setState({
+      curCustom:record
+    },()=>{
+      this.messageModelHandle(true);
+    });
+  };
+
+  messageModelHandle = (show=false) => {
+    this.setState({
+      messageModelShow:show
+    });
+  };
+
+  onSelectedMessage = (msg) => {
+    console.log(msg);
+  };
+
+  msgTemplateModelHandle = (show=false) => {
+    this.setState({
+      msgTemplateModelShow:show
+    });
+  };
+
+  templateModelOperationShow = (show=false,type="insert",data={}) => {
+    this.setState({
+      templateModelOperationShow: show,
+      msgTemplateTpye:type,
+      curMsgTemplate:data
+    });
+  };
+
+  templateModelOperationSubmit = (type,params) => {
+    console.log(type,params);
+    if(type==="insert"){
+      let data = storeHelper.getItem("msgTemplate") || [];
+      const id = uuidv4();
+      data.push({
+        id,
+        key:id,
+        ...params
+      });
+
+      storeHelper.setItem("msgTemplate",data);
+
+      this.setState({
+        templateModelOperationShow:false
+      },()=>{
+        this.MsgTeplate.updateComponent();
+      });
+    }
+
+    if(type==="update" && params.id){
+      const data = storeHelper.getItem("msgTemplate") || [];
+      let _data = flattenArr(data);
+      _data[params.id] = params;
+      _data = objToArr(_data);
+      storeHelper.setItem("msgTemplate",_data);
+      this.MsgTeplate.updateComponent();
+      this.templateModelOperationShow(false);
+    }
+  };
+
   render() {
-    const {data,customModelShow,customModelType,curCustom,tableSelectRowKeys}=this.state;
+    const {
+      data,
+      messageModelShow,
+      msgTemplateModelShow,
+      templateModelOperationShow,
+      msgTemplateTpye,
+      curMsgTemplate,
+      tableSelectRowKeys
+    }=this.state;
 
     const columns = [
       {
@@ -104,12 +181,17 @@ export default class BrithdayUser extends Component {
       {
         title: "操作",
         key: "action",
-        width:90,
-        // eslint-disable-next-line no-unused-vars
+        width:150,
         render: (text, record) => (
-          <span>
-            <a>编辑</a>
-          </span>
+          <Fragment>
+            <span onClick={()=>this.sendMessage(record)}>
+              <a>短信模板</a>
+            </span>
+            <Divider type="vertical"/>
+            <span onClick={()=>this.sendMessage(record)}>
+              <a>直接发送</a>
+            </span>
+          </Fragment>
         )
       }
     ];
@@ -145,19 +227,64 @@ export default class BrithdayUser extends Component {
                   onClick={this.reloadComponent}
                   type="primary"
               />
+              <Button icon="project"
+                  onClick={()=>this.msgTemplateModelHandle(true)}
+                  style={{marginLeft:8}}
+                  type="primary"
+              >短信模板</Button>
             </div>
           </TableWrap>
         </div>
         <Modal destroyOnClose
             footer={null}
             mask={false}
-            onCancel={()=>this.customModelHandle("",false)}
-            title={customModelType==="insert"?"新增用户":"编辑用户"}
-            visible={customModelShow}
+            onCancel={()=>this.messageModelHandle(false)}
+            title="祝福语"
+            visible={messageModelShow}
+            width="80%"
         >
-          <CustomForm curCustom={curCustom}
-              onSubmit={this.customModelHandle}
-              type={customModelType}
+          <Message onSelected={this.onSelectedMessage}>
+            <div style={{marginBottom:8}}>
+              <Alert message="选中想要的祝福语，生成祝福短信"
+                  showIcon
+                  type="info"
+              />
+            </div>
+          </Message>
+        </Modal>
+        <Modal destroyOnClose
+            footer={null}
+            mask={false}
+            onCancel={()=>this.msgTemplateModelHandle(false)}
+            title="短信模板"
+            visible={msgTemplateModelShow}
+            width="80%"
+        >
+          <MsgTeplate onEditer={this.templateModelOperationShow}
+              ref={(child) => { this.MsgTeplate = child; }}
+          >
+            <div style={{marginBottom:8}}>
+              <Button onClick={()=>this.templateModelOperationShow(true)}
+                  type="primary"
+              >添加模板</Button>
+            </div>
+            <Alert message="点击短信模板即可使用"
+                style={{marginBottom:8}}
+                type="info"
+            />
+          </MsgTeplate>
+        </Modal>
+        <Modal destroyOnClose
+            footer={null}
+            mask={false}
+            onCancel={()=>this.templateModelOperationShow(false)}
+            title="短信模板"
+            visible={templateModelOperationShow}
+            width="50%"
+        >
+          <MsgTemplateForm curMsg={curMsgTemplate}
+              onSubmit={this.templateModelOperationSubmit}
+              type={msgTemplateTpye}
           />
         </Modal>
       </div>

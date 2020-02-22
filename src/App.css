@@ -1,4 +1,6 @@
 @import '~antd/dist/antd.css';
+@import "~react-grid-layout/css/styles.css";
+@import "~react-resizable/css/styles.css";
 
 .App {
   text-align: center;
@@ -42,4 +44,13 @@
 /*override-ant-css*/
 .ant-tabs-bar {
   margin: 0 0 8px 0;
+}
+
+/*ueditor*/
+.edui-default .edui-button-body {
+  height: 20px !important;
+}
+
+.edui-default .edui-toolbar {
+  height: 26px !important;
 }
