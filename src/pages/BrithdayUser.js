@@ -47,7 +47,7 @@ export default class BrithdayUser extends Component {
   }
 
   fetchData = () => {
-    const storeData = storeHelper.getItem("custom");
+    const storeData = storeHelper.getItem("custom") || [];
 
     const _data = storeData.filter((o) => {
       if (!o.birthday) {
@@ -105,7 +105,8 @@ export default class BrithdayUser extends Component {
 
   msgTemplateModelHandle = (show=false) => {
     this.setState({
-      msgTemplateModelShow:show
+      msgTemplateModelShow:show,
+      curMsg:{}
     });
   };
 

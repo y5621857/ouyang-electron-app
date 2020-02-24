@@ -147,7 +147,7 @@ let memuTemplate = [
 ];
 
 if(process.platform==="darwin"){
-  const name = app.getName();
+  const name = app.name;
   memuTemplate.unshift(
     {
       label:name,
