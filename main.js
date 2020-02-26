@@ -10,9 +10,11 @@ const {ipcMain} = require("electron");//监听web page里发出的message
 const isDev = require("electron-is-dev");
 const menuTemplate=require("./src/config/menuTemplate");
 const AppWindow = require("./src/AppWindow");
+const Store = require("electron-store");
+const settingStore = new Store("Settings");
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-let mainWindow,settingWindow;
+let mainWindow,settingWindow,menu;
 
 app.on("ready", () => {
   app.setAboutPanelOptions({
@@ -45,9 +47,17 @@ app.on("ready", () => {
 
     const settingFileLocation=`file://${path.join(__dirname,"./settings/settings.html")}`;
     settingWindow=new AppWindow(settingWindowConfig,settingFileLocation);
-
+    // window 下隐藏菜单
+    settingWindow.removeMenu();
     settingWindow.on("closed",()=>{
       settingWindow=null;
+    });
+  });
+
+  ipcMain.on("config-is-saved", () => {
+    let qiniuMenu = process.platform==="darwin"?menu.items[3]:menu.items[2];
+    [1,2,3].forEach((key)=>{
+      qiniuMenu.submenu.items[key].enabled=!!settingStore.get("settingMenuEnable");
     });
   });
 
@@ -56,6 +66,6 @@ app.on("ready", () => {
     mainWindow.webContents.downloadURL(path);
   });
 
-  const menu = Menu.buildFromTemplate(menuTemplate);
+  menu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(menu);
 });

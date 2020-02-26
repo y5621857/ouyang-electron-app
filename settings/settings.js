@@ -4,12 +4,18 @@
  * Date: 2020-02-25
  * Time: 10:42
  */
-const {remote}=require("electron");
+const {remote, ipcRenderer}=require("electron");
+const Store =window.require("electron-store");
+const settingStore = new Store("Settings");
+
 const $ = (id)=>{
   return document.getElementById(id);
 };
 
 const closedWindowBtn = $("closedWindowBtn");
 closedWindowBtn.addEventListener("click",()=>{
+  settingStore.set("settingMenuEnable",true);
+
+  ipcRenderer.send("config-is-saved");
   remote.getCurrentWindow().close();
 });

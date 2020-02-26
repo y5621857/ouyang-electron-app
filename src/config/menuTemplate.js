@@ -5,6 +5,10 @@
  * Time: 16:05
  */
 const {app, shell, ipcMain} = require("electron");
+const Store = require("electron-store");
+const settingStore = new Store({name:"Settings"});
+const enableAutoSync = settingStore.get("enableAutoSync");
+const settingMenuEnable = !!settingStore.get("settingMenuEnable");
 
 let memuTemplate = [
   {
@@ -72,6 +76,41 @@ let memuTemplate = [
         label: "全选",
         accelerator: "CmdOrCtrl+A",
         role: "selectall"
+      }
+    ]
+  },
+  {
+    label:"云同步",
+    submenu:[
+      {
+        label:"设置",
+        accelerator: "CmdOrCtrl+,",
+        click:()=>{
+          ipcMain.emit("open-setting-window")
+        }
+      },
+      {
+        label:"自动同步",
+        type:"checkbox",
+        enabled:settingMenuEnable,
+        checked:enableAutoSync,
+        click:()=>{
+          settingStore.set("enableAutoSync",!enableAutoSync)
+        }
+      },
+      {
+        label:"全部同步至云端",
+        enabled:settingMenuEnable,
+        click:()=>{
+    
+        }
+      },
+      {
+        label:"从云端同步至本地",
+        enabled:settingMenuEnable,
+        click:()=>{
+    
+        }
       }
     ]
   },

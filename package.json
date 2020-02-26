@@ -84,6 +84,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "ele": "electron .",
+    "onlyEle": "nodemon --watch main.js --watch src/config/menuTemplate.js --exec electron .",
     "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run ele\""
   },
   "browserslist": {
