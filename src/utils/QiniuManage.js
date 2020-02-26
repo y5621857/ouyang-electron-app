@@ -5,6 +5,8 @@
  * Time: 17:21
  */
 const qiniu = require("qiniu");
+const axios =require("axios");
+const fs = require("fs");
 
 class QiniuManager {
   constructor(accessKey, secretKey, bucket) {
@@ -76,6 +78,13 @@ class QiniuManager {
     });
   }
 
+  /**
+   * @author YangYi
+   * @mail 229655153@qq.com
+   * @description 获取文件路径
+   * @param {string} key
+   * @return {Promise} 返回结果
+   */
   generateDownloadLink(key){
     const domainPromise=this.publicBucketDomain?Promise.resolve([this.publicBucketDomain]):this.getBucketDomain();
     return domainPromise.then(data=>{
@@ -87,6 +96,44 @@ class QiniuManager {
       }else{
         throw Error("域名未找到，请查看储存空间是否过期！");
       }
+    });
+  }
+
+  /**
+   * @author YangYi
+   * @mail 229655153@qq.com
+   * @description 下载文件
+   * @param {string} key
+   * @param {string} downloadPath
+   * @return {Promise} 返回结果
+   */
+  downloadFile(key, downloadPath) {
+    // step 1 创建下载链接
+    // step 2 创建可读流，创建可写流
+    // step 3 将可读流写入可写流
+    // step 4 完成后返回promise 结果
+    return this.generateDownloadLink(key).then(link=>{
+      const timeStamp = new Date().getTime();
+      const url = `${link}?timestamp=${timeStamp}`;
+
+      return axios({
+        url,
+        method:"GET",
+        responseType:"stream",
+        headers:{
+          "Cache-Control":"no-cache"
+        }
+      });
+    }).then(response=>{
+      const write = fs.createWriteStream(downloadPath);
+      response.data.pipe(write);
+
+      return new Promise((resolve, reject)=>{
+        write.on("finish",resolve);
+        write.on("error",reject);
+      });
+    }).catch(err=>{
+      return Promise.reject({err:err.response});
     });
   }
 
