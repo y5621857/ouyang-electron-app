@@ -73,6 +73,62 @@ export default class BrithdayUser extends Component {
     this.fetchData();
   };
 
+  searchSubmitHandle = (searchParams={}) => {
+    const storeData = storeHelper.getItem("custom") || [];
+
+    let _data = storeData.filter((o) => {
+      if (!o.birthday) {
+        return false;
+      }
+      const curDate = new Date(`${moment().year()}-${o.birthday}`);
+      const isValid = moment(curDate, "YYYY-MM-DD").isValid();
+      let isBetween = false;
+
+      if (isValid) {
+        isBetween = moment(curDate).isBetween(moment(), moment().add(3, "d"));
+      }
+
+      return o.birthday && isValid && isBetween;
+    });
+
+    if(searchParams.name){
+      const reg = new RegExp(searchParams.name,"g");
+
+      _data = _data.filter((item)=>{
+        return reg.test(item.name);
+      });
+    }
+
+    this.setState({
+      data:_data
+    });
+  };
+
+  searchResetHandle = (e) => {
+    if(e==="reset"){
+      const storeData = storeHelper.getItem("custom") || [];
+
+      let _data = storeData.filter((o) => {
+        if (!o.birthday) {
+          return false;
+        }
+        const curDate = new Date(`${moment().year()}-${o.birthday}`);
+        const isValid = moment(curDate, "YYYY-MM-DD").isValid();
+        let isBetween = false;
+
+        if (isValid) {
+          isBetween = moment(curDate).isBetween(moment(), moment().add(3, "d"));
+        }
+
+        return o.birthday && isValid && isBetween;
+      });
+
+      this.setState({
+        data:_data
+      });
+    }
+  };
+
   sendMessage = (record) => {
     this.setState({
       curCustom:record
@@ -105,8 +161,13 @@ export default class BrithdayUser extends Component {
 
   msgTemplateModelHandle = (show=false) => {
     this.setState({
-      msgTemplateModelShow:show,
-      curMsg:{}
+      msgTemplateModelShow:show
+    },()=>{
+      if(!show){
+        this.setState({
+          curMsg:{}
+        });
+      }
     });
   };
 

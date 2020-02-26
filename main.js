@@ -4,37 +4,56 @@
  * Date: 2020-02-14
  * Time: 16:56
  */
-const {app, BrowserWindow, Menu} = require("electron");
+const {app, Menu} = require("electron");
+const path=require("path");
 const {ipcMain} = require("electron");//监听web page里发出的message
 const isDev = require("electron-is-dev");
 const menuTemplate=require("./src/config/menuTemplate");
+const AppWindow = require("./src/AppWindow");
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-let mainWindow;
+let mainWindow,settingWindow;
 
 app.on("ready", () => {
-  mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 680,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  const urlLocation = isDev ? "http://localhost:3000/" : "";
-
-  mainWindow.loadURL(urlLocation);
-
-  ipcMain.on("download", (event, path) => {
-    //下面这句会触发will-download事件
-    mainWindow.webContents.downloadURL(path);
-  });
-
   app.setAboutPanelOptions({
     applicationName:"欧阳管理系统",
     applicationVersion:"1.0.0",
     version:"1.0.0",
     copyright:"版权所有@杨祎"
+  });
+
+  const mainWindowCOnfig = {
+    width: 1024,
+    height: 680
+  };
+
+  const urlLocation = isDev ? "http://localhost:3000/" : "";
+
+  mainWindow = new AppWindow(mainWindowCOnfig,urlLocation);
+
+  mainWindow.on("closed",()=>{
+    mainWindow=null;
+  });
+
+  ipcMain.on("open-setting-window", () => {
+    // 创建设置窗口
+    const settingWindowConfig = {
+      width: 500,
+      height:400,
+      parent:mainWindow
+    };
+
+    const settingFileLocation=`file://${path.join(__dirname,"./settings/settings.html")}`;
+    settingWindow=new AppWindow(settingWindowConfig,settingFileLocation);
+
+    settingWindow.on("closed",()=>{
+      settingWindow=null;
+    });
+  });
+
+  ipcMain.on("download", (event, path) => {
+    //下面这句会触发will-download事件
+    mainWindow.webContents.downloadURL(path);
   });
 
   const menu = Menu.buildFromTemplate(menuTemplate);

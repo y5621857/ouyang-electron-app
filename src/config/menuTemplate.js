@@ -4,7 +4,7 @@
  * Date: 2020-02-22
  * Time: 16:05
  */
-const {app, shell} = require("electron");
+const {app, shell, ipcMain} = require("electron");
 
 let memuTemplate = [
   {
@@ -160,6 +160,16 @@ if(process.platform==="darwin"){
           type:"separator"
         },
         {
+          label:"设置",
+          accelerator:"Cmd+,",
+          click:()=>{
+            ipcMain.emit("open-setting-window")
+          }
+        },
+        {
+          type:"separator"
+        },
+        {
           label:"服务",
           role: "services",
           submenu:[]
@@ -200,6 +210,14 @@ if(process.platform==="darwin"){
       ]
     }
   )
+}else{
+  memuTemplate[0].push({
+    label:"设置",
+    accelerator:"Ctrl+,",
+    click:()=>{
+      ipcMain.emit("open-setting-window")
+    }
+  })
 }
 
 module.exports=memuTemplate;

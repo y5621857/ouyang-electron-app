@@ -62,12 +62,22 @@ class CustomForm extends PureComponent {
             ]
           })(<Input placeholder="请输入"/>)}
         </Form.Item>
+        <Form.Item label="性别">
+          {getFieldDecorator("sex", {
+            initialValue:isUpdate?curCustom.sex:[]
+          })(
+            <Select placeholder="请选择">
+              <Select.Option value="男">男</Select.Option>
+              <Select.Option value="女">女</Select.Option>
+            </Select>
+          )}
+        </Form.Item>
         <Form.Item label="生日">
           {getFieldDecorator("birthday", {
             initialValue:isUpdate?(curCustom.birthday?moment(curCustom.birthday,"MM-DD"):moment()):null
           })(<DatePicker format="MM-DD"/>)}
         </Form.Item>
-        <Form.Item label="备注">
+        <Form.Item label="标签">
           {getFieldDecorator("tags", {
             initialValue:isUpdate?curCustom.tags:[]
           })(
@@ -83,6 +93,11 @@ class CustomForm extends PureComponent {
               }
             </Select>
           )}
+        </Form.Item>
+        <Form.Item label="备注">
+          {getFieldDecorator("remark", {
+            initialValue:isUpdate?curCustom.name:""
+          })(<Input placeholder="请输入"/>)}
         </Form.Item>
         <Form.Item labelCol={{span:0}}
             style={{textAlign:"right"}}
