@@ -98,7 +98,18 @@
   "bulid":{
     "appID":"com.ouyang.app",
     "productName": "欧阳管理系统",
-    "copyright" : "Copyright © 2020 ${author}"
+    "copyright" : "Copyright © 2020 ${author}",
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "settings/**/*",
+      "package.json",
+      "main.js",
+      "src/config/menuTemplate.js",
+      "src/AppWindow.js",
+      "src/utils/QiniuManage.js"
+    ]
   },
   "browserslist": {
     "production": [
