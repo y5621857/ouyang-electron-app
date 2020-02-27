@@ -6,7 +6,7 @@
  */
 const {remote, ipcRenderer}=require("electron");
 const Store =window.require("electron-store");
-const settingStore = new Store("Settings");
+const settingStore = new Store({name:"Settings"});
 
 const $ = (id)=>{
   return document.getElementById(id);

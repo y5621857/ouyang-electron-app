@@ -137,6 +137,19 @@ class QiniuManager {
     });
   }
 
+  /**
+   * @author YangYi
+   * @mail 229655153@qq.com
+   * @description 获取文件信息
+   * @param {string} key
+   * @return {Promise} 返回结果
+   */
+  getStat(key){
+    return new Promise((resolve, reject)=>{
+      this.bucketManager.stat(this.bucket, key, this._handleCallBack(resolve, reject));
+    });
+  }
+
   _handleCallBack(resolve, reject) {
     return (respErr, respBody, respInfo) => {
       if (respErr) {

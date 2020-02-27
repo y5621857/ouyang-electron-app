@@ -11,7 +11,7 @@ const isDev = require("electron-is-dev");
 const menuTemplate=require("./src/config/menuTemplate");
 const AppWindow = require("./src/AppWindow");
 const Store = require("electron-store");
-const settingStore = new Store("Settings");
+const settingStore = new Store({name:"Settings"});
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 let mainWindow,settingWindow,menu;

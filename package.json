@@ -164,6 +164,7 @@
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "react-app-rewired": "^2.1.5",
-    "wait-on": "^4.0.0"
+    "wait-on": "^4.0.0",
+    "electron-builder": "^22.3.2"
   }
 }
