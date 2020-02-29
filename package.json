@@ -36,14 +36,12 @@
     "dotenv-expand": "5.1.0",
     "electron-is-dev": "^1.1.0",
     "electron-store": "^5.1.1",
-    "eslint": "^6.6.0",
     "eslint-config-react-app": "^5.2.0",
     "eslint-loader": "3.0.3",
     "eslint-plugin-flowtype": "4.6.0",
     "eslint-plugin-import": "2.20.0",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.18.0",
-    "eslint-plugin-react-hooks": "^1.6.1",
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "4.0.0-beta.11",
@@ -93,13 +91,14 @@
     "onlyEle": "nodemon --watch main.js --watch src/config/menuTemplate.js --exec electron .",
     "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run ele\"",
     "pack": "electron-builder --dir",
-    "dict": "electron-builder"
+    "dict": "electron-builder",
+    "prepack": "npm run build"
   },
-  "bulid":{
-    "appID":"com.ouyang.app",
+  "homepage": "./",
+  "build":{
+    "appId": "com.ouyang.app",
     "productName": "欧阳管理系统",
     "copyright" : "Copyright © 2020 ${author}",
-    "extends": null,
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -109,10 +108,7 @@
       "./src/config/menuTemplate.js",
       "./src/AppWindow.js",
       "./src/utils/QiniuManage.js"
-    ],
-    "electronDownload": {
-      "mirror": "https://npm.taobao.org/mirrors/electron/"
-    }
+    ]
   },
   "browserslist": {
     "production": [
