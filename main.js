@@ -24,14 +24,14 @@ app.on("ready", () => {
     copyright:"版权所有@杨祎"
   });
 
-  const mainWindowCOnfig = {
+  const mainWindowConfig = {
     width: 1024,
     height: 680
   };
 
   const urlLocation = isDev ? "http://localhost:3000/" : `${path.join(__dirname,'build/index.html')}`;
 
-  mainWindow = new AppWindow(mainWindowCOnfig,urlLocation);
+  mainWindow = new AppWindow(mainWindowConfig,urlLocation);
 
   mainWindow.on("closed",()=>{
     mainWindow=null;
