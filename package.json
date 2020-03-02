@@ -91,14 +91,19 @@
     "onlyEle": "nodemon --watch main.js --watch src/config/menuTemplate.js --exec electron .",
     "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run ele\"",
     "pack": "electron-builder --dir",
-    "dict": "electron-builder",
-    "prepack": "npm run build"
+    "pack-win": "electron-builder --dir --win --x64",
+    "pack-mac": "electron-builder --dir --darwin --x64",
+    "pack-linux": "electron-builder --dir --linux --x64",
+    "dist": "electron-builder",
+    "dist-win": "electron-builder --win --x64",
+    "dist-mac": "electron-builder --darwin --x64",
+    "dist-linux": "electron-builder --linux --x64"
   },
   "homepage": "./",
-  "build":{
+  "build": {
     "appId": "com.ouyang.app",
     "productName": "欧阳管理系统",
-    "copyright" : "Copyright © 2020 ${author}",
+    "copyright": "Copyright © 2020 ${author}",
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -108,7 +113,50 @@
       "./src/config/menuTemplate.js",
       "./src/AppWindow.js",
       "./src/utils/QiniuManage.js"
-    ]
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "background": "assets/appdmg.png",
+      "icon": "assets/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    },
+    "win": {
+      "target": [
+        "msi",
+        "nsis"
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}",
+      "publisherName": "杨祎"
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": false
+    }
   },
   "browserslist": {
     "production": [
