@@ -86,6 +86,7 @@
     "lint": "eslint src",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "buildMain": "webpack",
     "test": "node scripts/test.js",
     "ele": "electron .",
     "onlyEle": "nodemon --watch main.js --watch src/config/menuTemplate.js --exec electron .",
@@ -97,7 +98,9 @@
     "dist": "electron-builder",
     "dist-win": "electron-builder --win --x64",
     "dist-mac": "electron-builder --darwin --x64",
-    "dist-linux": "electron-builder --linux --x64"
+    "dist-linux": "electron-builder --linux --x64",
+    "prepack": "npm run build && npm run buildMain",
+    "predist": "npm run build && npm run buildMain"
   },
   "homepage": "./",
   "build": {
@@ -109,11 +112,11 @@
       "node_modules/**/*",
       "settings/**/*",
       "package.json",
-      "main.js",
-      "./src/config/menuTemplate.js",
-      "./src/AppWindow.js",
-      "./src/utils/QiniuManage.js"
+      "main.js"
     ],
+    "extraMetadata": {
+      "main": "./build/main.js"
+    },
     "directories": {
       "buildResources": "assets"
     },
