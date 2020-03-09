@@ -29,6 +29,7 @@ app.on("ready", () => {
     height: 680
   };
   
+  // 生成环境用webpack打包出来的压缩优化的文件main.js，在./build/目录下
   const urlLocation = isDev ? "http://localhost:3000/" : `file://${path.join(__dirname, "./index.html")}`;
   
   mainWindow = new AppWindow(mainWindowConfig, urlLocation);
