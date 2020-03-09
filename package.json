@@ -93,7 +93,7 @@
     "onlyEle": "nodemon --watch main.js --watch src/config/menuTemplate.js --exec electron .",
     "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run ele\"",
     "pack": "electron-builder --dir",
-    "release": "cross-env GH_TOKEN=7894850f35496b9701b3d69cfe242bf7406ac655 electron-builder",
+    "release": "cross-env GH_TOKEN=0a3c28e21efdeb5a93a497153679738e44ddb21d electron-builder",
     "pack-win": "electron-builder --dir --win --x64",
     "pack-mac": "electron-builder --dir --darwin --x64",
     "pack-linux": "electron-builder --dir --linux --x64",
@@ -239,13 +239,14 @@
     "concurrently": "^5.1.0",
     "cross-env": "^7.0.0",
     "customize-cra": "^0.9.1",
+    "electron": "^8.1.0",
+    "electron-builder": "^22.3.2",
     "eslint": "^6.8.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "react-app-rewired": "^2.1.5",
     "wait-on": "^4.0.0",
-    "electron": "^8.0.2",
-    "electron-builder": "^22.3.2"
+    "webpack-cli": "^3.3.11"
   }
 }

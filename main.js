@@ -45,12 +45,12 @@ app.on("ready", () => {
     });
   });
   
-  app.setAboutPanelOptions({
-    applicationName: "欧阳管理系统",
-    applicationVersion: "1.0.0",
-    version: "1.0.0",
-    copyright: "版权所有@杨祎"
-  });
+  // app.setAboutPanelOptions({
+  //   applicationName: "欧阳管理系统",
+  //   applicationVersion: "1.0.0",
+  //   version: "1.0.0",
+  //   copyright: "版权所有@杨祎"
+  // });
   
   const mainWindowConfig = {
     width: 1024,
