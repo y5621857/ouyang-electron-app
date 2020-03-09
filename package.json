@@ -117,6 +117,9 @@
     "extraMetadata": {
       "main": "./build/main.js"
     },
+    "publish": [
+      "github"
+    ],
     "directories": {
       "buildResources": "assets"
     },
