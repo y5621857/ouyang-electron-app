@@ -4,7 +4,8 @@
  * Date: 2020-02-14
  * Time: 16:56
  */
-const {app, Menu} = require("electron");
+const {app, Menu, dialog} = require("electron");
+const {autoUpdater} = require("electron-updater");
 const path = require("path");
 const {ipcMain} = require("electron");//监听web page里发出的message
 const isDev = require("electron-is-dev");
@@ -17,6 +18,33 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 let mainWindow, settingWindow, menu;
 
 app.on("ready", () => {
+  autoUpdater.autoDownload = false;
+  autoUpdater.checkForUpdatesAndNotify();
+  // 更新失败
+  autoUpdater.on("error", (error) => {
+    dialog.showErrorBox("Error:", error === null ? "unknown" : (error.stackTotal));
+  });
+  // 有新版本
+  autoUpdater.on("update-available", () => {
+    dialog.showMessageBox({
+      type: "info",
+      title: "有新版本",
+      message: "发现新版本，是否现在更新？",
+      buttons: ["是", "否"]
+    }, (buttonIndex) => {
+      if (buttonIndex === 0) {
+        autoUpdater.downloadUpdate();
+      }
+    });
+  });
+  // 没有更新
+  autoUpdater.on("update-not-available", () => {
+    dialog.showMessageBox({
+      title: "没有新版本",
+      message: "当前已是最新版本"
+    });
+  });
+  
   app.setAboutPanelOptions({
     applicationName: "欧阳管理系统",
     applicationVersion: "1.0.0",

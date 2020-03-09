@@ -2,13 +2,13 @@
   "main": "main.js",
   "name": "electron-react-ouyang",
   "productName": "欧阳管理系统",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "杨祎",
     "email": "229655153@qq.com"
   },
   "description": "协助欧阳管理办公软件",
-  "repository": "229655153@qq.com",
+  "repository": "https://github.com/y5621857/ouyang-electron-app.git",
   "private": true,
   "dependencies": {
     "@babel/core": "7.8.4",
@@ -36,6 +36,7 @@
     "dotenv-expand": "5.1.0",
     "electron-is-dev": "^1.1.0",
     "electron-store": "^5.1.1",
+    "electron-updater": "^4.2.4",
     "eslint-config-react-app": "^5.2.0",
     "eslint-loader": "3.0.3",
     "eslint-plugin-flowtype": "4.6.0",
@@ -92,6 +93,7 @@
     "onlyEle": "nodemon --watch main.js --watch src/config/menuTemplate.js --exec electron .",
     "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run ele\"",
     "pack": "electron-builder --dir",
+    "release": "cross-env GH_TOKEN=7894850f35496b9701b3d69cfe242bf7406ac655 electron-builder",
     "pack-win": "electron-builder --dir --win --x64",
     "pack-mac": "electron-builder --dir --darwin --x64",
     "pack-linux": "electron-builder --dir --linux --x64",
@@ -100,7 +102,8 @@
     "dist-mac": "electron-builder --darwin --x64",
     "dist-linux": "electron-builder --linux --x64",
     "prepack": "npm run build && npm run buildMain",
-    "predist": "npm run build && npm run buildMain"
+    "predist": "npm run build && npm run buildMain",
+    "prerelease": "npm run build && npm run buildMain"
   },
   "homepage": "./",
   "build": {
