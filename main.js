@@ -18,25 +18,59 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 let mainWindow, settingWindow, menu;
 
 app.on("ready", () => {
+  if (isDev) {
+    autoUpdater.updateConfigPath = path.join(__dirname, "dev-app.update.yml");
+  }
+  
   autoUpdater.autoDownload = false;
-  autoUpdater.checkForUpdatesAndNotify();
+  if (isDev) {
+    autoUpdater.checkForUpdates();
+  } else {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+  
   // 更新失败
   autoUpdater.on("error", (error) => {
     dialog.showErrorBox("Error:", error === null ? "unknown" : (error.stackTotal));
   });
+  
+  // 检查更新
+  autoUpdater.on("checking-for-update", () => {
+    console.log("检查更新");
+  });
+  
   // 有新版本
-  autoUpdater.on("update-available", () => {
+  autoUpdater.on("update-available", (UpdateInfo) => {
     dialog.showMessageBox({
       type: "info",
       title: "有新版本",
-      message: "发现新版本，是否现在更新？",
-      buttons: ["是", "否"]
-    }, (buttonIndex) => {
-      if (buttonIndex === 0) {
+      message: `发现新版本(${UpdateInfo.version})，是否现在更新？`,
+      buttons: ["否", "是"]
+    }).then(({response}) => {
+      if (response === 1) {
         autoUpdater.downloadUpdate();
       }
     });
   });
+  
+  // 下载进度
+  autoUpdater.on("download-progress", (progressObj) => {
+    let logMsg = `下载速度：${progressObj.bytesPerSecond}`;
+    logMsg += `-下载进度：${progressObj.percent.toFixed(2)}%`;
+    logMsg += `-文件内容：(${progressObj.transferred}/${progressObj.total})`;
+    console.log(logMsg);
+  });
+  
+  // 下载完成
+  autoUpdater.on("update-downloaded", (progressObj) => {
+    dialog.showMessageBox({
+      title: "安装更新",
+      message: "更新下载完成，应用将重新启动并进行安装"
+    }).then(() => {
+      setTimeout(() => autoUpdater.quitAndInstall(), 500);
+    });
+  });
+  
   // 没有更新
   autoUpdater.on("update-not-available", () => {
     dialog.showMessageBox({
