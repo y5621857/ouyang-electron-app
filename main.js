@@ -6,6 +6,7 @@
  */
 const {app, Menu, dialog} = require("electron");
 const {autoUpdater} = require("electron-updater");
+const log = require("electron-log");
 const path = require("path");
 const {ipcMain} = require("electron");//监听web page里发出的message
 const isDev = require("electron-is-dev");
@@ -18,6 +19,15 @@ process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 let mainWindow, settingWindow, menu;
 
 app.on("ready", () => {
+  // 修改日志记录的格式
+  log.transports.console.format =
+    "[{h}:{i}:{s}.{ms}] [{level} {processType}] › {text}";
+  log.transports.file.format =
+    "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}";
+  
+  log.transports.file.fileName = "ouyang-app-electron.log";
+  log.debug("test log");
+  
   if (isDev) {
     autoUpdater.updateConfigPath = path.join(__dirname, "dev-app.update.yml");
   }
@@ -31,7 +41,8 @@ app.on("ready", () => {
   
   // 更新失败
   autoUpdater.on("error", (error) => {
-    dialog.showErrorBox("Error:", error === null ? "unknown" : (error.stackTotal));
+    console.log("更新异常", error);
+    dialog.showErrorBox("更新异常", error === null ? "unknown" : (error.stackTotal));
   });
   
   // 检查更新
@@ -56,9 +67,9 @@ app.on("ready", () => {
   // 下载进度
   autoUpdater.on("download-progress", (progressObj) => {
     let logMsg = `下载速度：${progressObj.bytesPerSecond}`;
-    logMsg += `-下载进度：${progressObj.percent.toFixed(2)}%`;
-    logMsg += `-文件内容：(${progressObj.transferred}/${progressObj.total})`;
-    console.log(logMsg);
+    logMsg += `，下载进度：${progressObj.percent.toFixed(2)}%`;
+    logMsg += `(${progressObj.transferred}/${progressObj.total})`;
+    log.info(logMsg);
   });
   
   // 下载完成
